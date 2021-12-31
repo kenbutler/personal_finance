@@ -1,0 +1,14 @@
+@startuml
+
+class Transaction {
+    + date : date
+    + starting_value : float
+    + change : float
+    + description : string
+}
+
+class Ledger {
+    + name : string
+}
+
+@enduml
