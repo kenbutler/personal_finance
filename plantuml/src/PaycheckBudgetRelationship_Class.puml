@@ -1,0 +1,64 @@
+@startuml
+
+enum Frequency {
+    FIXED
+    WEEKLY
+    MONTHLY
+    ANNUALLY
+}
+
+class Reservoir {
+    + name : string
+    + category : string
+    + essential : bool = false
+    + value : float = 0.0
+    + savings_rate : float = 0.0
+    + savings_rate_type : Frequency = FIXED
+    + limit : float = 0.0
+    + last_changed : date = Today
+    + history : list = []
+    + history_limit : int = 10
+}
+
+note left of Reservoir
+    Paycheck and Budget
+    use same Reservoirs
+end note
+
+class Budget {
+    + base : float = 0.0
+    + reservoirs : dict = {}
+    + sources: list = []
+}
+
+note left of Budget
+    Base represents any base
+    safety net to build into
+    the budget
+
+    Sources are Accounts at which
+    money resides -- money that
+    is categorized by reservoirs
+end note
+
+class Paycheck {
+    + value : float
+    + date : date
+    + period : float
+    + allocations : dict = {}
+    + priorities : list = []
+    + float compute_cost_of_living(num_months : float)
+    + void add_allocation(r : Reservoir, priority : int)
+    + void remove_allocation(name : string)
+    - void update_priorities(void)
+}
+
+note left of Paycheck
+    Period is represented in
+    number of weeks
+end note
+
+Paycheck "1" *-- "1..N" Reservoir : allocates to
+Reservoir "1..N" --o "1" Budget : consists of
+
+@enduml

@@ -1,5 +1,3 @@
 *.pyc
 .idea/
-*.png
-*.jpg
 __pycache__/
