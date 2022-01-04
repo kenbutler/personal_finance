@@ -3,13 +3,7 @@
 ## Overview
 
 ### Architecture & Design
-Account Types
-
-![Account Types](./plantuml/out/AccountTypes_Class.png)
-
-Relationship between Paycheck & Budget Classes
-
-![Relationship between Paycheck & Budget](./plantuml/out/PaycheckBudgetRelationship_Class.png)
+![Class Diagram](./plantuml/out/ClassDiagram.png)
 
 ## Importing Libraries
 

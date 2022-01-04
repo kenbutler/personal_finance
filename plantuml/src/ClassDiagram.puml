@@ -1,0 +1,152 @@
+@startuml
+
+enum Necessity {
+    CRITICAL
+    NECESSARY
+    EXCUSABLE
+    EXTRAVAGANT
+}
+
+class Transaction {
+    + date : date
+    + amount : float
+    + description : string
+    + previous_value : float
+    + confirmed : bool = False
+    + reservoir_name : string = ""
+}
+
+class Expense {
+    + necessity_level : Necessity
+}
+
+class Account {
+    + name : string
+    + number : int
+    + website : string
+    + phone : int
+    - value : float = 0.0
+    + float getValue()
+}
+
+note right of Account
+    Of the N accounts that exist,
+    only M of them are associated
+    with a Budget. Here M <= N
+end note
+
+class Checking {
+    + routing_number : int
+}
+
+class Savings {
+    + routing_number : int
+    + interest_rate : float
+}
+
+class MoneyMarket {
+    + routing_number : int
+    + interest_rate : float
+}
+
+class CreditCard {
+    ' TODO
+    + credit_limit : float
+}
+
+class IRA {
+    ' TODO: Individual retirement account
+}
+
+class Traditional {
+    ' TODO: Traditional IRA
+}
+
+class Roth {
+    ' TODO: Roth IRA
+}
+
+enum Frequency {
+    FIXED
+    WEEKLY
+    MONTHLY
+    ANNUALLY
+}
+
+class Reservoir {
+    + name : string
+    + category : string
+    + essential : bool = false
+    + value : float = 0.0
+    + savings_rate : float = 0.0
+    + savings_rate_type : Frequency = FIXED
+    + limit : float = 0.0
+    + last_changed : date = Today
+    + history : list = []
+    + history_limit : int = 10
+}
+
+note left of Reservoir
+    Paycheck and Budget
+    use same Reservoirs
+end note
+
+class Budget {
+    + base : float = 0.0
+    + reservoirs : dict = {}
+    + sources: list = []
+}
+
+note bottom of Budget
+    Base represents any base
+    safety net to build into
+    the budget
+end note
+
+note bottom of Budget
+    Sources are Accounts at
+    which money resides --
+    money that is categorized
+    by reservoirs
+end note
+
+class Paycheck {
+    + value : float
+    + date : date
+    + period : float
+    + allocations : dict = {}
+    + priorities : list = []
+    + float compute_cost_of_living(num_months : float)
+    + void add_allocation(r : Reservoir, priority : int)
+    + void remove_allocation(name : string)
+    - void update_priorities(void)
+}
+
+note left of Paycheck
+    Period is represented in
+    number of weeks
+end note
+
+class NetWorth {
+    ' TODO: Net worth
+}
+
+NetWorth "1" o-- "1..N" Account
+Paycheck "1" *-- "1..L" Reservoir : allocates to
+Reservoir "1..L" --o "1" Budget : consists of
+Budget "1" o-- "1..M" Account
+
+' A collection of transactions could also be called a "ledger"
+Expense --|> Transaction
+Transaction "many" --* "1" Account
+
+' Account relationships
+Account <|-- Checking
+Account <|-- Savings
+Account <|-- MoneyMarket
+Account <|-- CreditCard
+Account <|-- IRA
+IRA <|-- Traditional
+IRA <|-- Roth
+
+@enduml
